@@ -1,6 +1,7 @@
 import { sleep } from "../tools/sleep";
 import { GamePage } from '../types/GamePage';
 import { CommonUI } from '../ui/commonUI';
+import { BonfireManager } from "./managers/BonfireManager";
 
 declare global {
     let unsafeWindow: Window | undefined;
@@ -19,13 +20,19 @@ export class GameIntegration {
     private _lastMessage: string = "";
     private _lastMessageRepeat: number = 0;
     private _lastMessageElt: { span: HTMLElement } = { span: document.createElement("span") };
+    private interval = 50;
+
     private commonUI: CommonUI;
+    private bonfireManager: BonfireManager;
+    
 
     constructor(game: GamePage) {
         console.log('GameIntegration constructor');
         this.game = game;
 
         this.commonUI = new CommonUI(this);
+
+        this.bonfireManager = new BonfireManager(this);
         this.init();
         this.start();
     }
@@ -35,7 +42,18 @@ export class GameIntegration {
     }
 
     start() {
-        
+        const loop = () => {
+
+            this.iterate().then(() => {
+                setTimeout(loop, this.interval);
+            })
+        };
+
+        loop();
+    }
+
+    async iterate(): Promise<void> {
+        await this.bonfireManager.run();
     }
 
     static async waitForGame(timeout = 30000): Promise<GameIntegration> {

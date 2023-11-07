@@ -8,11 +8,13 @@ export class CommonUI {
     constructor(instance: GameIntegration) {
         this.instance = instance;
         this.game = instance.game;
-     }
-
-    setDefaultTheme() {
-        this.instance.printMessage("Set Theme to sleek");
-        this.game.toggleScheme("sleek");
     }
-    
+
+    setDefaultTheme(theme = "sleek") {
+        if (this.game.colorScheme !== theme) {
+            this.instance.printMessage(`Set Theme to ${theme}`);
+            this.game.toggleScheme(theme);
+        }
+    }
+
 }
