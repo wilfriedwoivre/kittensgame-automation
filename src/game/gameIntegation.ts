@@ -1,5 +1,5 @@
 import { sleep } from "../tools/sleep";
-import { GamePage } from "../types/GamePage";
+import { GamePage } from '../types/GamePage';
 
 declare global {
     let unsafeWindow: Window | undefined;
@@ -14,27 +14,50 @@ declare global {
 }
 
 export class GameIntegration {
-    constructor() {
+    game: GamePage;
+    private _lastMessage: string = "";
+    private _lastMessageRepeat: number = 0;
+    private _lastMessageElt: { span: HTMLElement } = { span: document.createElement("span") };
+
+    constructor(game: GamePage) {
         console.log('GameIntegration constructor');
+        this.game = game;
     }
 
-    static async waitForGame(timeout = 30000): Promise<GamePage> {
+    static async waitForGame(timeout = 30000): Promise<GameIntegration> {
         if (timeout < 0) {
             throw new Error("Game did not load in time");
         }
 
         if ($("#loadingContainer").is(":hidden") && $("#game").is(":visible")) {
-            console.log("Game is loaded, init Kittens Automation");
+            var msg = "Game is loaded, init Kittens Automation";
+            console.log(msg);
             if (window.gamePage !== null && window.gamePage !== undefined) {
-                return window.gamePage;
+                var game = new GameIntegration(window.gamePage);
+                game.printMessage(msg);
+                return game;
             }
         }
 
-        return new Promise<GamePage>((resolve, reject) => {
+        return new Promise<GameIntegration>((resolve, reject) => {
             sleep(1000).then(() =>
                 this.waitForGame(timeout - 1000).then(resolve).catch(reject));
         });
+    }
 
+    printMessage(message: string) {
+        if (this._lastMessage !== message) {
+            this._lastMessageRepeat = 0;
+
+            var item = this.game.msg(message, "", "", true);
+            $(item.span).css("color", "#009933");
+
+            this._lastMessageElt = item;
+            this._lastMessage = message;
+        } else {
+            $(this._lastMessageElt.span).text(`${this._lastMessage} (x${this._lastMessageRepeat})`);
+            this._lastMessageRepeat++;
+        }
     }
 
 }
