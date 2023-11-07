@@ -26,11 +26,11 @@ jobs:
         run: npm run build-prod
 
       - name: Release kittens manager
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: softprops/action-gh-release@v0.1.15
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with: 
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: "latest"
+          name: "latest"
           prerelease: true
-          title: "Dev build"
           files: |
             dist/*
