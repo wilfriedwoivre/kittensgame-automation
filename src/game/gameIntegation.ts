@@ -1,3 +1,4 @@
+import { sleep } from "../tools/sleep";
 import { GamePage } from "../types/GamePage";
 
 declare global {
@@ -18,7 +19,6 @@ export class GameIntegration {
     }
 
     static async waitForGame(timeout = 30000): Promise<GamePage> {
-
         if (timeout < 0) {
             throw new Error("Game did not load in time");
         }
@@ -31,9 +31,8 @@ export class GameIntegration {
         }
 
         return new Promise<GamePage>((resolve, reject) => {
-            setTimeout(() => {
-                this.waitForGame(timeout - 1000).then(resolve).catch(reject);
-            }, 1000);
+            sleep(1000).then(() =>
+                this.waitForGame(timeout - 1000).then(resolve).catch(reject));
         });
 
     }
