@@ -1,5 +1,6 @@
 import { sleep } from "../tools/sleep";
 import { GamePage } from '../types/GamePage';
+import { CommonUI } from '../ui/commonUI';
 
 declare global {
     let unsafeWindow: Window | undefined;
@@ -18,10 +19,22 @@ export class GameIntegration {
     private _lastMessage: string = "";
     private _lastMessageRepeat: number = 0;
     private _lastMessageElt: { span: HTMLElement } = { span: document.createElement("span") };
+    private commonUI: CommonUI;
 
     constructor(game: GamePage) {
         console.log('GameIntegration constructor');
         this.game = game;
+
+        this.init();
+        this.start();
+    }
+
+    init() { 
+        this.commonUI = new CommonUI(this);
+    }
+
+    start() {
+        this.commonUI.setDefaultTheme();
     }
 
     static async waitForGame(timeout = 30000): Promise<GameIntegration> {
