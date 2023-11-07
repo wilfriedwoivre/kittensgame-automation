@@ -25,16 +25,17 @@ export class GameIntegration {
         console.log('GameIntegration constructor');
         this.game = game;
 
+        this.commonUI = new CommonUI(this);
         this.init();
         this.start();
     }
 
     init() { 
-        this.commonUI = new CommonUI(this);
+        this.commonUI.setDefaultTheme();
     }
 
     start() {
-        this.commonUI.setDefaultTheme();
+        
     }
 
     static async waitForGame(timeout = 30000): Promise<GameIntegration> {
