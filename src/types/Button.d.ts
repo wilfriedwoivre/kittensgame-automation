@@ -1,7 +1,4 @@
 export type Button = {
-    metadata: {
-        name: string;
-    };
     controller: {
         buyItem: (model: Model, event: any, callback: any) => void;
     };
@@ -10,4 +7,7 @@ export type Button = {
 
 export type Model = {
     name: string;
+    metadata: {
+        name: string;
+    };
 }

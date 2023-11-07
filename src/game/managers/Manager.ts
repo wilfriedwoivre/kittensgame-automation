@@ -12,7 +12,7 @@ export abstract class Manager {
     }
 
     getButton(buttons: Button[], name: string): Button {
-        var btn = buttons.find((btn: Button) => (btn.metadata == null && btn.model.name === name) || (btn.metadata != null && btn.metadata.name === name));
+        var btn = buttons.find((btn: Button) => (btn.model.metadata == null && btn.model.name === name) || (btn.model.metadata != null && btn.model.metadata.name === name));
         if (!btn) {
             throw new Error(`Button ${name} not found`);
         }
