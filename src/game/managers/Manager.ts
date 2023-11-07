@@ -23,5 +23,6 @@ export abstract class Manager {
 
     buyItem(btn: Button) {
         this.instance.printMessage(`Click on ${btn.model.name}`);
+        btn.controller.buyItem(btn.model, {}, () => {});
     }
 }
