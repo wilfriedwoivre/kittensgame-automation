@@ -5,7 +5,7 @@ export class BonfireManager extends Manager {
     run(): void {
         this.autoGathering();
 
-        this.buyBuilding("Catnip Field");
+        this.buyBuilding("field");
     }
 
     autoGathering() {
